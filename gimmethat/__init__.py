@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect, Response
 from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename
-from gimmethat.config import (UPLOAD_DIR, TITLE, SECRET_KEY, PORT, USER_CREDS,
+from gimmethat.config import (UPLOAD_DIR, TITLE, SECRET_KEY, USER_CREDS,
                               MAX_CONTENT_LENGTH)
 from functools import wraps, partial
 from datetime import datetime
@@ -23,9 +23,7 @@ def get_ips():
     for interface in interfaces:
         try:
             if 'broadcast' in ni.ifaddresses(interface)[ni.AF_INET][0]:
-                ips.append('{}:{}'.format(
-                    ni.ifaddresses(interface)[ni.AF_INET][0]['addr'],
-                    PORT))
+                ips.append(ni.ifaddresses(interface)[ni.AF_INET][0]['addr'])
         except KeyError:
             pass
     return ips
@@ -38,8 +36,7 @@ def check_auth(username, password):
     with open(USER_CREDS) as f:
         users = json.load(f)
     for u in users:
-        if all((u['username'] == username,
-                u['password'] == password, u['active'])):
+        if u['username'] == username and u['password'] == password:
             return True
 
 

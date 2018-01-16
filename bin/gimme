@@ -1,7 +1,7 @@
 #!/bin/env python3
 import argparse
 import json
-from gimmethat import app, USER_CREDS, PORT
+from gimmethat import app, USER_CREDS
 from gimmethat.config import DEBUG, UPLOAD_DIR
 import os
 
@@ -26,7 +26,7 @@ main_parser = argparse.ArgumentParser(description='Upload server tool')
 subparsers = main_parser.add_subparsers(help='What to do?', dest='branch')
 
 run_parser = subparsers.add_parser('run', help='Runs server')
-run_parser.add_argument('port', type=int, help='Server port', default=5000)
+run_parser.add_argument('--port', type=int, help='Server port', default=5000)
 
 config_parser = subparsers.add_parser('config', help='Configuration')
 
@@ -54,8 +54,8 @@ if args.branch == 'run':
     if not os.path.exists(USER_CREDS):
         with open(USER_CREDS) as f:
             pass
-
-    app.run(host="0.0.0.0", port=PORT, debug=DEBUG, threaded=True)
+    print('Running on port', args.port)
+    app.run(host="0.0.0.0", port=args.port, debug=DEBUG, threaded=True)
 
 elif args.branch == 'add':
     creds = load_creds()
