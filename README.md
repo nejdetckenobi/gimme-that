@@ -37,4 +37,4 @@ I haven't packaged the project yet. But if you want to give it a try, here are t
 
 Just run `run.py` to run the server. You can find an example gif above. It's the only way because I didn't create standard packages. But later, I'll fix that.
 
-Once you've start the server, your friends can upload files to your computer.
+Once you've start the server, your friends can upload files to your computer. Please use `Python 3.x`.

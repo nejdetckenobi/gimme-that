@@ -1,6 +1,6 @@
 #!/bin/env python3
 from app import app, USER_CREDS, PORT
-from config import DEBUG
+from config import DEBUG, UPLOAD_DIR
 import os
 
 
@@ -10,6 +10,8 @@ if __name__ == '__main__':
         log = logging.getLogger(name='werkzeug')
         log.setLevel(logging.INFO)
 
+    if not os.path.exists(os.path.expanduser(UPLOAD_DIR)):
+        os.mkdir(os.path.expanduser(UPLOAD_DIR))
     if not os.path.exists(USER_CREDS):
         with open(USER_CREDS) as f:
             pass
