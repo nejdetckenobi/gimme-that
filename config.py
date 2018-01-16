@@ -1,3 +1,5 @@
+import os
+
 # Cosmetic
 TITLE = "Someone's file storage"
 
@@ -6,7 +8,7 @@ DEBUG = False
 
 # The line below is where to put the uploaded files.
 # Use the full path and do not use wildcards.
-UPLOAD_DIR = "~/Uploads"
+UPLOAD_DIR = os.path.expanduser("~/Uploads")
 
 # Total file size in one upload session.
 # e.g.

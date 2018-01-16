@@ -10,8 +10,8 @@ if __name__ == '__main__':
         log = logging.getLogger(name='werkzeug')
         log.setLevel(logging.INFO)
 
-    if not os.path.exists(os.path.expanduser(UPLOAD_DIR)):
-        os.mkdir(os.path.expanduser(UPLOAD_DIR))
+    if not os.path.exists(UPLOAD_DIR):
+        os.mkdir(UPLOAD_DIR)
     if not os.path.exists(USER_CREDS):
         with open(USER_CREDS) as f:
             pass
