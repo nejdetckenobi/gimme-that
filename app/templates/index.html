@@ -1,0 +1,50 @@
+{% extends 'bootstrap/base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block metas %}
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+{% endblock %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script src="/static/vue.js"></script>
+{% endblock %}
+{% block body %}
+    <div id="app" class="col-md-offset-4 col-md-4">
+        <form class="col-md-12 text-center clearfix" action="/upload" method="post" enctype="multipart/form-data">
+            <h3>{{ title }}</h3>
+            <div class="col-md-offset-2 col-md-8 col-sm-6 col-sm-offset-3 col-xs-12">
+                <pre class="col-md-12">{{ '\n'.join(ip_addresses) }}</pre>
+            </div>
+            <br>
+            <input id="file-input" type="file" name="file" multiple @change="get_file_list">
+            <div class="col-md-8 col-md-offset-2 col-sm-6 col-sm-offset-3 col-xs-12">
+                <p class="alert alert-success col-md-12" role="alert" v-show="percentage === 100"><span class="glyphicon glyphicon-duplicate"></span> Files sent! <a href="/">Another package?</a></p>
+            </div>
+            <div class="col-md-8 col-md-offset-2 col-sm-6 col-sm-offset-3 col-xs-12">
+                <p class="alert alert-danger col-md-12" role="alert" v-show="abort"><span class="glyphicon glyphicon-remove"></span> Aborted by you. <a href="/">Refresh?</a></p>
+            </div>
+            <div class="btn-group-vertical col-md-8 col-md-offset-2 col-sm-6 col-sm-offset-3 col-xs-12" v-show="(file_list.length === 0) && percentage === 0">
+                <label id="file-pick-label" for="file-input" class="btn btn-lg btn-success btn-block"><span class="glyphicon glyphicon-duplicate"></span>&emsp;Pick files to send</label>
+            </div>
+            <div class="btn-group-vertical col-md-8 col-md-offset-2 col-sm-6 col-sm-offset-3 col-xs-12" v-show="(file_list.length > 0) && percentage === 0">
+                <label id="file-repick-label" for="file-input" class="btn btn-lg btn-warning btn-block">Repick files&nbsp;<span class="glyphicon glyphicon-duplicate"></span></label>
+                <button id="send-button" type="submit" class="btn btn-lg btn-primary btn-block" @click.prevent="send_files" :disabled="percentage !== 0">Send&nbsp;<span class="glyphicon glyphicon-send"></span></button>
+            </div>
+            <div class="col-md-8 col-md-offset-2 col-sm-6 col-sm-offset-3 col-xs-12" v-show="percentage !== 0 && percentage !== 100">
+                <div class="progress" v-show="!abort">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="'width: ' + percentage +'%'">
+                        {% raw %}{{ parseInt(percentage) }}{% endraw %}%
+                    </div>
+                </div>
+                <button id="abort-button" type="button" class="btn btn-danger btn-lg btn-block" v-show="percentage !== 0 && percentage !== 100 && !abort" @click="abort=true"><span class="glyphicon glyphicon-remove"></span>&nbsp;Abort</button>
+            </div>
+        </form>
+    </div>
+    {% block scripts %}
+        {{ super() }}
+        <script src="/static/application.js"></script>
+    {% endblock %}
+{% endblock %}
