@@ -23,4 +23,4 @@ SECRET_KEY = "#VERY_HARD_KEY#"
 PORT = 5000
 
 # The line below keeps the permanent user list.
-USER_CREDS = "userlist.json"
+USER_CREDS = os.path.expanduser("~/gimmethat_userlist.json")

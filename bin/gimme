@@ -1,15 +1,53 @@
 #!/bin/env python3
-
+import argparse
+import json
 from gimmethat import app, USER_CREDS, PORT
 from gimmethat.config import DEBUG, UPLOAD_DIR
 import os
 
 
-if __name__ == '__main__':
-    if not DEBUG:
-        import logging
-        log = logging.getLogger(name='werkzeug')
-        log.setLevel(logging.INFO)
+def save_creds(creds=None):
+    if not creds:
+        creds = []
+    with open(USER_CREDS, 'w') as f:
+        json.dump(creds, f, indent=4)
+
+
+def load_creds():
+    try:
+        with open(USER_CREDS) as f:
+            creds = json.load(f)
+        return creds
+    except:
+        save_creds()
+    return []
+
+main_parser = argparse.ArgumentParser(description='Upload server tool')
+subparsers = main_parser.add_subparsers(help='What to do?', dest='branch')
+
+run_parser = subparsers.add_parser('run', help='Runs server')
+run_parser.add_argument('port', type=int, help='Server port', default=5000)
+
+config_parser = subparsers.add_parser('config', help='Configuration')
+
+add_user_parser = subparsers.add_parser('add', help='Add a user')
+add_user_parser.add_argument('username', type=str, help='User\'s name')
+add_user_parser.add_argument('password', type=str, help='User\'s password')
+
+remove_user_parser = subparsers.add_parser('remove', help='Remove a user')
+remove_user_parser.add_argument('username', type=str, help='User\'s name')
+
+change_user_parser = subparsers.add_parser(
+    'change', help='Change a user\'s password')
+
+show_users_parser = subparsers.add_parser('show', help='Show all users')
+
+args = main_parser.parse_args()
+
+if args.branch == 'run':
+    import logging
+    log = logging.getLogger(name='werkzeug')
+    log.setLevel(logging.INFO)
 
     if not os.path.exists(UPLOAD_DIR):
         os.mkdir(UPLOAD_DIR)
@@ -18,3 +56,23 @@ if __name__ == '__main__':
             pass
 
     app.run(host="0.0.0.0", port=PORT, debug=DEBUG, threaded=True)
+
+elif args.branch == 'add':
+    creds = load_creds()
+    if args.username not in [u['username'] for u in creds]:
+        creds.append({'username': args.username,
+                      'password': args.password})
+        save_creds(creds)
+    else:
+        print('User already exists.')
+
+elif args.branch == 'remove':
+    creds = load_creds()
+    creds = [u for u in creds if u['username'] != args.username]
+    save_creds(creds)
+
+elif args.branch == 'show':
+    creds = load_creds()
+    for u in creds:
+        print('Username: "{}", Password: "{}"'.format(
+            u['username'], u['password']))
