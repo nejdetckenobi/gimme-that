@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, url_for, redirect, Response
 from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename
-from config import (UPLOAD_DIR, TITLE, SECRET_KEY, PORT, USER_CREDS,
-                    MAX_CONTENT_LENGTH)
+from gimmethat.config import (UPLOAD_DIR, TITLE, SECRET_KEY, PORT, USER_CREDS,
+                              MAX_CONTENT_LENGTH)
 from functools import wraps, partial
 from datetime import datetime
 import werkzeug

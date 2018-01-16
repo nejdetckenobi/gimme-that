@@ -1,6 +1,7 @@
 #!/bin/env python3
+
 from gimmethat import app, USER_CREDS, PORT
-from config import DEBUG, UPLOAD_DIR
+from gimmethat.config import DEBUG, UPLOAD_DIR
 import os
 
 
