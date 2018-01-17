@@ -65,7 +65,7 @@ For example, to provide the screen above and to set upload directory to *SOMEPAT
 |------|-------|
 | `--directory` | `~/Uploads` (`~` is current user's home directory in both Windows and *nix) |
 | `--port` | 5000 |
-| `--title` | `` (Nothing will be shown as title) | 
+| `--title` | ` ` (Nothing will be shown as title) | 
 
 ## Notes
 
