@@ -50,10 +50,22 @@ You can see all users you created by typing
 
 Use the command below to run your server on port *PORT*
 
-`gimme run PORT`
+`gimme run`
 
 This will produce the output which contains the address of the interfaces you can use to connect the upload page. 
 Once you've start the server, your friends can upload files to your computer. Please use `Python 3.x`.
+You can specify port, title and upload directory by using optional parameters.
+For example, to provide the screen above and to set upload directory to *SOMEPATH*, you should use the command below
+
+`gimme run --port 5000 --directory "SOMEPATH" --title "Someone's file storage"`
+
+#### Default values for parameters
+
+| Name | Value |
+|------|-------|
+| `--directory` | `~/Uploads` (`~` is current user's home directory in both Windows and *nix) |
+| `--port` | 5000 |
+| `--title` | `` (Nothing will be shown as title) | 
 
 ## Notes
 
