@@ -42,8 +42,6 @@ subparsers = main_parser.add_subparsers(help='What to do?', dest='branch')
 run_parser = subparsers.add_parser('run', help='Runs server')
 run_parser.add_argument('--port', type=int, help='Server port', default=5000)
 
-config_parser = subparsers.add_parser('config', help='Configuration')
-
 add_user_parser = subparsers.add_parser('add', help='Add a user')
 add_user_parser.add_argument('username', type=str, help='User\'s name')
 add_user_parser.add_argument('password', type=str, help='User\'s password')
@@ -53,6 +51,8 @@ remove_user_parser.add_argument('username', type=str, help='User\'s name')
 
 change_user_parser = subparsers.add_parser(
     'change', help='Change a user\'s password')
+change_user_parser.add_argument('username', type=str, help='User\'s name')
+change_user_parser.add_argument('password', type=str, help='User\'s password')
 
 show_users_parser = subparsers.add_parser('show', help='Show all users')
 
@@ -64,10 +64,11 @@ if args.branch == 'run':
     log.setLevel(logging.INFO)
 
     if not os.path.exists(UPLOAD_DIR):
+        print('Creating upload directory: {}'.format(UPLOAD_DIR))
         os.mkdir(UPLOAD_DIR)
     if not os.path.exists(USER_CREDS):
-        with open(USER_CREDS) as f:
-            pass
+        print('Creating credential list : {}'.format(USER_CREDS))
+        save_creds()
 
     print('You can use the addresses below')
     for ip in get_ips():
@@ -93,3 +94,10 @@ elif args.branch == 'show':
     for u in creds:
         print('Username: "{}", Password: "{}"'.format(
             u['username'], u['password']))
+
+elif args.branch == 'change':
+    creds = load_creds()
+    for u in creds:
+        if u['username'] == args.username:
+            u['password'] == args.password
+    save_creds(creds)

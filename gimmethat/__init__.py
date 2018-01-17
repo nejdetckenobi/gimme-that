@@ -69,7 +69,7 @@ def file_stream_saver(total_content_length, filename,
 @app.route('/')
 @requires_auth
 def index(data):
-    return render_template('index.html', title=TITLE, ip_addresses=get_ips())
+    return render_template('index.html', title=TITLE)
 
 
 @app.route('/info')
