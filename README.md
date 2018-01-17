@@ -7,34 +7,44 @@ _Gimme That_ is a file transfer tool written in Python. It turns your computer i
 
 ## Installation
 
-I haven't packaged the project yet. But if you want to give it a try, here are the steps:
-
-1. Clone the repo.
-
-    `git clone https://github.com/nejdetckenobi/gimme-that`
-
-2. Go to the project's directory
-
-    `cd gimme-that`
-
-3. Run `make install`
-
-    `make install`
-
-4. Open up `config.py` with your favorite text editor and modify the lines below
-
-| Line  |             Value           |
-|-------|-----------------------------|
-| TITLE | Message on your upload page. |
-| DEBUG | Make it `True` to suppress debug logs (Notice the caps) |
-| UPLOAD_DIR | Where to put uploaded files. Use full path and no wildcards. |
-| MAX_CONTENT_LENGTH | Total size of files uploaded in a single request in bytes. <br> E.g. `MAX_CONTENT_LENGTH = 50 * 1024 * 1024` for 50 MB. <br> Set it `MAX_CONTENT_LENGTH = None` for unlimited file size. |
-| PORT | In default, program uses `5000`. If you want to use another port, set it here. |
-| USER_CREDS | Static users' credentials (Username and password). It is a JSON file. |
-
+Just use `pip install gimmethat` to install.
 
 ## How to use it?
 
-Just run `run.py` to run the server. You can find an example gif above. It's the only way because I didn't create standard packages. But later, I'll fix that.
+_Gimme That_ has a simple concept: You turn yourself into a server, add some username and password, give that credentials to your friend with your adress and your friend uploads files to your computer.
 
+So, there are several things you can do with this program.
+
+### Creating users
+
+Use the line below to create a user named *USERNAME* with the password *PASSWORD*
+
+`gimme add USERNAME PASSWORD`
+
+
+### Removing users
+
+Use the line below to remove a user named *USERNAME*
+
+`gimme remove USERNAME`
+
+
+### Changing user passwords
+
+Use the line below to change *USERNAME*'s password to *PASSWORD*
+`gimme change USERNAME PASSWORD`
+
+### Showing all users
+
+You can see all users you created by typing
+
+`gimme show`
+
+### Running the server
+
+Use the command below to run your server on port *PORT*
+
+`gimme run PORT`
+
+This will produce the output which contains the address of the interfaces you can use to connect the upload page. 
 Once you've start the server, your friends can upload files to your computer. Please use `Python 3.x`.
