@@ -20,7 +20,8 @@ setup(
     ],
     include_package_data=True,
     classifiers=[
-        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+        'License :: OSI Approved :'
+        ': GNU General Public License v3 or later (GPLv3+)',
         'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Environment :: Web Environment',
@@ -30,6 +31,7 @@ setup(
         'Intended Audience :: Other Audience',
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',
+        'Operating System :: OS Independent',
         'Topic :: Communications :: File Sharing',
         'Topic :: Utilities'
     ]
