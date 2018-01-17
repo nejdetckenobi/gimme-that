@@ -50,4 +50,8 @@ Use the command below to run your server on port *PORT*
 This will produce the output which contains the address of the interfaces you can use to connect the upload page. 
 Once you've start the server, your friends can upload files to your computer. Please use `Python 3.x`.
 
-Note: *GimmeThat* uses [Twitter's Bootstrap](https://getbootstrap.com/).
+## Notes
+
+- *GimmeThat* uses [Twitter's Bootstrap](https://getbootstrap.com/).
+
+- *GimmeThat* **does not overwrite** uploaded files. When your friend `user` used your server to upload `wiggle.jpg` at `2018-01-17 16:14:24.620737`, program will put the files into `~/Uploads/user/2018-01-17 16:14:24.620737/wiggle.jpg`. So, even if he/she uploads the same file again and again, it'll be put into different directories.
