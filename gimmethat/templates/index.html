@@ -15,9 +15,6 @@
     <div id="app" class="col-md-offset-4 col-md-4">
         <form class="col-md-12 text-center clearfix" action="/upload" method="post" enctype="multipart/form-data">
             <h3>{{ title }}</h3>
-            <div class="col-md-offset-2 col-md-8 col-sm-6 col-sm-offset-3 col-xs-12">
-                <pre class="col-md-12">{{ '\n'.join(ip_addresses) }}</pre>
-            </div>
             <br>
             <input id="file-input" type="file" name="file" multiple @change="get_file_list">
             <div class="col-md-8 col-md-offset-2 col-sm-6 col-sm-offset-3 col-xs-12">
