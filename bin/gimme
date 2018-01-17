@@ -40,7 +40,13 @@ main_parser = argparse.ArgumentParser(description='Upload server tool')
 subparsers = main_parser.add_subparsers(help='What to do?', dest='branch')
 
 run_parser = subparsers.add_parser('run', help='Runs server')
-run_parser.add_argument('--port', type=int, help='Server port', default=5000)
+run_parser.add_argument('--port', '-p', type=int,
+                        help='Server port', default=5000)
+run_parser.add_argument('--title', '-t', type=str,
+                        help='Upload page\'s title', default='')
+run_parser.add_argument('--directory', '-d', type=str,
+                        help='Upload directory',
+                        default=UPLOAD_DIR)
 
 add_user_parser = subparsers.add_parser('add', help='Add a user')
 add_user_parser.add_argument('username', type=str, help='User\'s name')
@@ -63,9 +69,11 @@ if args.branch == 'run':
     log = logging.getLogger(name='werkzeug')
     log.setLevel(logging.INFO)
 
-    if not os.path.exists(UPLOAD_DIR):
-        print('Creating upload directory: {}'.format(UPLOAD_DIR))
-        os.mkdir(UPLOAD_DIR)
+    if not os.path.exists(os.path.expanduser(args.directory)):
+        print('Creating upload directory: {}'.format(
+            os.path.expanduser(args.directory)))
+        os.mkdir(os.path.expanduser(args.directory))
+
     if not os.path.exists(USER_CREDS):
         print('Creating credential list : {}'.format(USER_CREDS))
         save_creds()
@@ -73,6 +81,9 @@ if args.branch == 'run':
     print('You can use the addresses below')
     for ip in get_ips():
         print('http://{}:{}'.format(ip, args.port))
+
+    app.config['TITLE'] = args.title
+    app.config['UPLOAD_DIR'] = os.path.expanduser(args.directory)
     app.run(host="0.0.0.0", port=args.port, debug=DEBUG, threaded=True)
 
 elif args.branch == 'add':
