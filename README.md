@@ -32,6 +32,7 @@ Use the line below to remove a user named *USERNAME*
 ### Changing user passwords
 
 Use the line below to change *USERNAME*'s password to *PASSWORD*
+
 `gimme change USERNAME PASSWORD`
 
 ### Showing all users
