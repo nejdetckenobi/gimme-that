@@ -7,7 +7,12 @@ _Gimme That_ is a file transfer tool written in Python. It turns your computer i
 
 ## Installation
 
-Just use `pip install gimmethat` to install.
+Just use `pip install gimmethat` to install. 
+It has following dependencies
+
+- `flask`
+- `flask_bootstrap`
+- `netifaces`
 
 ## How to use it?
 
