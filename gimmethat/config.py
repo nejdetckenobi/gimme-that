@@ -19,8 +19,5 @@ MAX_CONTENT_LENGTH = None
 # You can rewrite the key. Don't forget the quotes
 SECRET_KEY = "#VERY_HARD_KEY#"
 
-# You can change the port. Do not use ports smaller than 1000.
-PORT = 5000
-
 # The line below keeps the permanent user list.
 USER_CREDS = os.path.expanduser("~/gimmethat_userlist.json")
