@@ -49,3 +49,5 @@ Use the command below to run your server on port *PORT*
 
 This will produce the output which contains the address of the interfaces you can use to connect the upload page. 
 Once you've start the server, your friends can upload files to your computer. Please use `Python 3.x`.
+
+Note: *GimmeThat* uses [Twitter's Bootstrap](https://getbootstrap.com/).
