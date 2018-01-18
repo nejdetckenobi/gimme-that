@@ -57,8 +57,8 @@ def requires_auth(f):
     return decorated
 
 
-def file_stream_saver(total_content_length, filename,
-                      content_type, content_length=None, timestamp='NONE'):
+def file_stream_saver(total_content_length, content_type, filename,
+                      content_length=None, timestamp='NONE'):
     filename = secure_filename(filename)
     file_upl_dir = os.path.join(UPLOAD_DIR,
                                 request.authorization.username,
@@ -92,7 +92,7 @@ def upload(data):
         request.environ,
         stream_factory=partial(
             file_stream_saver,
-            timestamp=str(datetime.now())).replace(':', '-'))
+            timestamp=str(datetime.now()).replace(':', '-')))
     for fp in files.values():
         print('\t"{}"'.format(fp.filename))
         fp.close()
