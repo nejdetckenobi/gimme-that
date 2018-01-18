@@ -90,8 +90,9 @@ def upload(data):
     print('RECEIVED from "{}"'.format(folder_name))
     stream, form, files = werkzeug.formparser.parse_form_data(
         request.environ,
-        stream_factory=partial(file_stream_saver,
-                               timestamp=str(datetime.now())))
+        stream_factory=partial(
+            file_stream_saver,
+            timestamp=str(datetime.now())).replace(':', '-'))
     for fp in files.values():
         print('\t"{}"'.format(fp.filename))
         fp.close()
