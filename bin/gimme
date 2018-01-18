@@ -109,7 +109,6 @@ elif args.branch == 'show':
 elif args.branch == 'change':
     creds = load_creds()
     for u in creds:
-        print('>', u['username'])
         if u['username'] == args.username:
             u['password'] = args.password
     save_creds(creds)
