@@ -66,11 +66,20 @@ For example, to provide the screen above and to set upload directory to *SOMEPAT
 | `--directory` | `~/Uploads` (`~` is current user's home directory in both Windows and *nix) |
 | `--port` | 5000 |
 | `--title` | ` ` (Nothing will be shown as title) | 
-| `--max-size` | No limit if not set. Can be `256` for 256 bytes, `13.6K` for 13.6 kilobytes, `1M` for 1 megabyte, `2.2G` for 2.2 gigabytes) |
+| `--max-size` | No limit if not set. <br> Can be `256` for 256 bytes, <br> `13.6K` for 13.6 kilobytes, <br> `1M` for 1 megabyte, <br> `2.2G` for 2.2 gigabytes, <br> etc.) |
 
 
 ## Notes
 
 - *GimmeThat* uses [Twitter's Bootstrap](https://getbootstrap.com/).
 
-- *GimmeThat* **does not overwrite** uploaded files. When your friend `user` used your server to upload `wiggle.jpg` at `2018-01-17 16:14:24.620737`, program will put the files into `~/Uploads/user/2018-01-17 16:14:24.620737/wiggle.jpg`. So, even if he/she uploads the same file again and again, it'll be put into different directories.
+- *GimmeThat* **does not overwrite** uploaded files. When your friend `user` used your server to upload `wiggle.jpg` at `2018-01-17 16:14:24.620737`, program will put the files into `~/Uploads/user/2018-01-17 16-14-24.620737/wiggle.jpg`. So, even if he/she uploads the same file again and again, it'll be put into different directories.
+
+
+## Thanks
+
+Thanks to the following reddit users for their ideas:
+
+- [AyrA_ch](https://www.reddit.com/user/AyrA_ch)
+- [RibMusic](https://www.reddit.com/user/RibMusic)
+
