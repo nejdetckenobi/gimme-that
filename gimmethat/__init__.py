@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, url_for, redirect, Response
+from flask import (Flask, request, url_for, Response,
+                   abort, render_template, redirect)
 from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename
-from gimmethat.config import (UPLOAD_DIR, SECRET_KEY, USER_CREDS,
-                              MAX_CONTENT_LENGTH)
+from gimmethat.config import UPLOAD_DIR, SECRET_KEY, USER_CREDS
 from functools import wraps, partial
 from datetime import datetime
 import werkzeug
@@ -12,11 +12,9 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
-app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
 app.config['BOOTSTRAP_SERVE_LOCAL'] = True
 app.config['UPLOAD_DIR'] = UPLOAD_DIR
 app.config['TITLE'] = ''
-
 
 Bootstrap(app)
 
@@ -59,6 +57,8 @@ def requires_auth(f):
 
 def file_stream_saver(total_content_length, content_type, filename,
                       content_length=None, timestamp='NONE'):
+    if total_content_length > app.config['MAX_CONTENT_LENGTH']:
+        return abort(413)
     filename = secure_filename(filename)
     file_upl_dir = os.path.join(UPLOAD_DIR,
                                 request.authorization.username,

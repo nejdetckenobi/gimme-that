@@ -5,6 +5,9 @@ import netifaces as ni
 from gimmethat import app, USER_CREDS
 from gimmethat.config import DEBUG, UPLOAD_DIR
 import os
+import re
+
+FILESIZE_PATTERN = re.compile('([0-9]+(\.[0-9]+)?)(.?)')
 
 
 def save_creds(creds=None):
@@ -47,6 +50,9 @@ run_parser.add_argument('--title', '-t', type=str,
 run_parser.add_argument('--directory', '-d', type=str,
                         help='Upload directory',
                         default=UPLOAD_DIR)
+run_parser.add_argument('--max-size', '-M', type=str, default='',
+                        help='Maximum upload size.')
+
 
 add_user_parser = subparsers.add_parser('add', help='Add a user')
 add_user_parser.add_argument('username', type=str, help='User\'s name')
@@ -77,6 +83,27 @@ if args.branch == 'run':
     if not os.path.exists(USER_CREDS):
         print('Creating credential list : {}'.format(USER_CREDS))
         save_creds()
+
+    if args.max_size:
+        num, _, unit = FILESIZE_PATTERN.match(args.max_size).groups()
+        num = float(num)
+        if not unit:
+            pass
+        elif unit == 'K':
+            num = num * 1024
+        elif unit == 'M':
+            num = num * 1024 * 1024
+        elif unit == 'G':
+            num = num * 1024 * 1024 * 1024
+        else:
+            raise Exception('Unidentified unit \'{}\''.format(unit))
+
+        app.config['MAX_CONTENT_LENGTH'] = int(num)
+        print('Maximum upload size in one upload process is', args.max_size)
+
+    else:
+        print('Unlimited file size! Use with caution.')
+        app.config['MAX_CONTENT_LENGTH'] = None
 
     print('You can use the addresses below')
     for ip in get_ips():

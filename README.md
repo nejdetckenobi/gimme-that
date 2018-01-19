@@ -66,6 +66,8 @@ For example, to provide the screen above and to set upload directory to *SOMEPAT
 | `--directory` | `~/Uploads` (`~` is current user's home directory in both Windows and *nix) |
 | `--port` | 5000 |
 | `--title` | ` ` (Nothing will be shown as title) | 
+| `--max-size` | No limit if not set. Can be `256` for 256 bytes, `13.6K` for 13.6 kilobytes, `1M` for 1 megabyte, `2.2G` for 2.2 gigabytes) |
+
 
 ## Notes
 
