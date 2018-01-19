@@ -57,8 +57,9 @@ def requires_auth(f):
 
 def file_stream_saver(total_content_length, content_type, filename,
                       content_length=None, timestamp='NONE'):
-    if total_content_length > app.config['MAX_CONTENT_LENGTH']:
-        return abort(413)
+    if app.config['MAX_CONTENT_LENGTH']:
+        if total_content_length > app.config['MAX_CONTENT_LENGTH']:
+            return abort(413)
     filename = secure_filename(filename)
     file_upl_dir = os.path.join(UPLOAD_DIR,
                                 request.authorization.username,
