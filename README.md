@@ -8,11 +8,12 @@ _Gimme That_ is a file transfer tool written in Python. It turns your computer i
 ## Installation
 
 Just use `pip install gimmethat` to install.
-It has following dependencies
+It has following Python package dependencies
 
 - `flask`
 - `flask_bootstrap`
 - `netifaces`
+- `clamd`
 
 ## How to use it?
 
@@ -66,8 +67,8 @@ For example, to provide the screen above and to set upload directory to *SOMEPAT
 | `--directory` | `"~/Uploads"` (`~` is current user's home directory in both Windows and *nix) |
 | `--port` | 5000 |
 | `--title` | `""` (Nothing will be shown as title) |
-| `--max-size` | No limit if not set. <br> Can be `256` for 256 bytes, <br> `13.6K` for 13.6 kilobytes, <br> `1M` for 1 megabyte, <br> `2.2G` for 2.2 gigabytes, <br> etc.) |
-| `--scan` | False if not specified. Else, uploaded files will be scanned if you have ClamAV and will be removed if infected. |
+| `--max-size` | No limit if not set. <br> Can be `256` for 256 bytes, <br> `13.6K` for 13.6 kilobytes, <br> `1M` for 1 megabyte, <br> `2.2G` for 2.2 gigabytes, <br> etc. |
+| `--scan` | False if not specified. Else, <br> uploaded files will be scanned if you have ClamAV <br> and will be removed if infected. |
 
 ## Notes
 
@@ -79,6 +80,13 @@ For example, to provide the screen above and to set upload directory to *SOMEPAT
   Both issues are solved for linux. Please check [Antivirus Issues](#antivirus-issues) section.
   - Clamav is not installed.
   - Permission errors. (Possible cause of `lstat() failed`)
+
+## Additional Screenshots
+
+Command line while a client uploads some files, ClamAV's action when an infected file found, multi file uploading and removing infected ones while clean ones stay.
+
+![antivirus](https://user-images.githubusercontent.com/4905664/35181654-f3143e10-fdd6-11e7-8b67-9f7e834e87dc.gif)
+
 
 
 ## Antivirus Issues
@@ -112,7 +120,7 @@ sudo systemctl enable clamav-daemon
 
 ### Clamav is not configured properly
 
-**Note:** `USERNAME` is your account's username. **Not** the name which you created to `gimme add`.
+**Note:** `USERNAME` is your account's username. **Not** the name which you created with `gimme add`.
 
 Stop the ClamAV first:
 ```sh
