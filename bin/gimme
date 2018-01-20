@@ -53,6 +53,9 @@ run_parser.add_argument('--directory', '-d', type=str,
 run_parser.add_argument('--max-size', '-M', type=str, default='',
                         help='Maximum upload size.')
 
+run_parser.add_argument('--scan', action='store_true',
+                        help=('Scan uploaded files with clamav and '
+                              'remove the infected ones'))
 
 add_user_parser = subparsers.add_parser('add', help='Add a user')
 add_user_parser.add_argument('username', type=str, help='User\'s name')
@@ -99,15 +102,24 @@ if args.branch == 'run':
             raise Exception('Unidentified unit \'{}\''.format(unit))
 
         app.config['MAX_CONTENT_LENGTH'] = int(num)
-        print('Maximum upload size in one upload process is', args.max_size)
-
     else:
-        print('Unlimited file size! Use with caution.')
         app.config['MAX_CONTENT_LENGTH'] = None
+
+    app.config['SCAN'] = args.scan
+
+    # Console messages
+    if app.config['TITLE']:
+        print('"{}" is running with following configuration:'.format(
+            app.config['TITLE']))
+    else:
+        print('Running with following configuration:')
+    print('Max upload size: {} ({})'.format(
+        args.max_size, app.config['MAX_CONTENT_LENGTH']))
+    print('Scan uploaded files:', app.config['SCAN'])
 
     print('You can use the addresses below')
     for ip in get_ips():
-        print('http://{}:{}'.format(ip, args.port))
+        print('\thttp://{}:{}'.format(ip, args.port))
 
     app.config['TITLE'] = args.title
     app.config['UPLOAD_DIR'] = os.path.expanduser(args.directory)

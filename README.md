@@ -7,7 +7,7 @@ _Gimme That_ is a file transfer tool written in Python. It turns your computer i
 
 ## Installation
 
-Just use `pip install gimmethat` to install. 
+Just use `pip install gimmethat` to install.
 It has following dependencies
 
 - `flask`
@@ -22,23 +22,23 @@ So, there are several things you can do with this program.
 
 ### Creating users
 
-Use the line below to create a user named *USERNAME* with the password *PASSWORD*
+Use the line below to create a user named *USER* with the password *PASSWORD*
 
-`gimme add USERNAME PASSWORD`
+`gimme add USER PASSWORD`
 
 
 ### Removing users
 
-Use the line below to remove a user named *USERNAME*
+Use the line below to remove a user named *USER*
 
-`gimme remove USERNAME`
+`gimme remove USER`
 
 
 ### Changing user passwords
 
-Use the line below to change *USERNAME*'s password to *PASSWORD*
+Use the line below to change *USER*'s password to *PASSWORD*
 
-`gimme change USERNAME PASSWORD`
+`gimme change USER PASSWORD`
 
 ### Showing all users
 
@@ -52,7 +52,7 @@ Use the command below to run your server on port *PORT*
 
 `gimme run`
 
-This will produce the output which contains the address of the interfaces you can use to connect the upload page. 
+This will produce the output which contains the address of the interfaces you can use to connect the upload page.
 Once you've start the server, your friends can upload files to your computer. Please use `Python 3.x`.
 You can specify port, title and upload directory by using optional parameters.
 For example, to provide the screen above and to set upload directory to *SOMEPATH*, you should use the command below
@@ -63,11 +63,11 @@ For example, to provide the screen above and to set upload directory to *SOMEPAT
 
 | Name | Value |
 |------|-------|
-| `--directory` | `~/Uploads` (`~` is current user's home directory in both Windows and *nix) |
+| `--directory` | `"~/Uploads"` (`~` is current user's home directory in both Windows and *nix) |
 | `--port` | 5000 |
-| `--title` | ` ` (Nothing will be shown as title) | 
+| `--title` | `""` (Nothing will be shown as title) |
 | `--max-size` | No limit if not set. <br> Can be `256` for 256 bytes, <br> `13.6K` for 13.6 kilobytes, <br> `1M` for 1 megabyte, <br> `2.2G` for 2.2 gigabytes, <br> etc.) |
-
+| `--scan` | False if not specified. Else, uploaded files will be scanned if you have ClamAV and will be removed if infected. |
 
 ## Notes
 
@@ -75,6 +75,83 @@ For example, to provide the screen above and to set upload directory to *SOMEPAT
 
 - *GimmeThat* **does not overwrite** uploaded files. When your friend `user` used your server to upload `wiggle.jpg` at `2018-01-17 16:14:24.620737`, program will put the files into `~/Uploads/user/2018-01-17 16-14-24.620737/wiggle.jpg`. So, even if he/she uploads the same file again and again, it'll be put into different directories.
 
+- If you specify `--scan` option and getting interesting logs for every single file (or an error maybe), you may have the issues below:
+  Both issues are solved for linux. Please check [Antivirus Issues](#antivirus-issues) section.
+  - Clamav is not installed.
+  - Permission errors. (Possible cause of `lstat() failed`)
+
+
+## Antivirus Issues
+
+### Clamav is not installed
+
+Please use the command below to install ClamAV:
+
+```sh
+sudo apt-get install clamav-daemon clamav-freshclam clamav-unofficial-sigs
+```
+
+Then update the virus DB by running the command below. This will take some time.
+
+```sh
+sudo freshclam  # It'll update the virus DB.
+```
+
+And then start ClamAV daemon:
+
+```sh
+sudo systemctl start clamav-daemon
+```
+
+Optionally, you enable `clamav-daemon` so it will be automatically run on startup:
+
+```sh
+sudo systemctl enable clamav-daemon
+
+```
+
+### Clamav is not configured properly
+
+**Note:** `USERNAME` is your account's username. **Not** the name which you created to `gimme add`.
+
+Stop the ClamAV first:
+```sh
+sudo systemctl stop clamav-daemon
+```
+
+Just because I use ClamAV for on-demand scans, I set the user for ClamAV as ourselves.
+To do this, open `/etc/clamav/clamd.conf` with your text editor and find the `User` line.
+(**Caution**: It will require superuser privileges.)
+
+```
+...
+User clamav
+...
+```
+Replace the value `clamav` with your username. (My username is `USERNAME` here.)
+
+```
+User USERNAME
+```
+
+Save and close the file when you're done.
+
+Add your user to `clamav` group.
+
+```sh
+sudo adduser USERNAME clamav
+```
+
+Then change the ownership of the log file so it can use the file again
+
+```sh
+sudo chown USERNAME:clamav /var/log/clamav/clamav.log
+```
+
+And lastly, start ClamAV again:
+```sh
+sudo systemctl start clamav-daemon
+```
 
 ## Thanks
 
@@ -82,4 +159,3 @@ Thanks to the following reddit users for their ideas:
 
 - [AyrA_ch](https://www.reddit.com/user/AyrA_ch)
 - [RibMusic](https://www.reddit.com/user/RibMusic)
-

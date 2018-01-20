@@ -9,12 +9,15 @@ import werkzeug
 import netifaces as ni
 import json
 import os
+from gimmethat.antivirus import scan_file
+# from ipdb import set_trace
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['BOOTSTRAP_SERVE_LOCAL'] = True
 app.config['UPLOAD_DIR'] = UPLOAD_DIR
 app.config['TITLE'] = ''
+app.config['SCAN'] = False
 
 Bootstrap(app)
 
@@ -89,14 +92,34 @@ def upload(data):
     if folder_name not in os.listdir(UPLOAD_DIR):
         os.mkdir(os.path.join(UPLOAD_DIR, folder_name))
     print('RECEIVED from "{}"'.format(folder_name))
+    timestamp = str(datetime.now()).replace(':', '-')
     stream, form, files = werkzeug.formparser.parse_form_data(
         request.environ,
         stream_factory=partial(
             file_stream_saver,
-            timestamp=str(datetime.now()).replace(':', '-')))
-    for fp in files.values():
-        print('\t"{}"'.format(fp.filename))
+            timestamp=timestamp))
+    for name, fp in files.items():
         fp.close()
+        if app.config['SCAN']:
+            abs_filepath = os.path.join(
+                UPLOAD_DIR, folder_name, timestamp, name)
+            scan_results = scan_file(abs_filepath)
+            r = scan_results[abs_filepath]
+            if r[0] == 'OK':
+                print('\t"{}" => {}'.format(fp.filename, r[0]))
+            elif r[0] == 'FOUND':
+                print('\t"{}" => {} [{}] REMOVED!'.format(
+                    fp.filename, r[0], r[1]))
+                os.remove(abs_filepath)
+            else:
+                print('\t"{}" has an interesting scan result. Check below:')
+                print(scan_results)
+                print('It can be a configuration/permission error',
+                      'if you are encountering interesting logs for every',
+                      'file.')
+        else:
+            print('\t"{}"'.format(fp.filename))
+
     return redirect(url_for('success'))
 
 
