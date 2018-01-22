@@ -99,9 +99,11 @@ Please use the command below to install ClamAV:
 sudo apt-get install clamav-daemon clamav-freshclam clamav-unofficial-sigs
 ```
 
-Then update the virus DB by running the command below. This will take some time.
+Then update the virus DB by running the commands below. This will take some time.
 
 ```sh
+sudo systemctl stop clamav-daemon
+sudo systemctl stop clamav-freshclam
 sudo freshclam  # It'll update the virus DB.
 ```
 
@@ -109,13 +111,14 @@ And then start ClamAV daemon:
 
 ```sh
 sudo systemctl start clamav-daemon
+sudo systemctl start clamav-freshclam
 ```
 
 Optionally, you enable `clamav-daemon` so it will be automatically run on startup:
 
 ```sh
 sudo systemctl enable clamav-daemon
-
+sudo systemctl enable clamav-freshclam
 ```
 
 ### Clamav is not configured properly
@@ -140,6 +143,7 @@ I am assuming that you reinstalled the following packages:
 Stop the ClamAV first:
 ```sh
 sudo systemctl stop clamav-daemon
+sudo systemctl stop clamav-freshclam
 ```
 
 Just because I use ClamAV for on-demand scans, I set the user for ClamAV as ourselves.
