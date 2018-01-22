@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+current_user="$USER"
+sudo echo "Stopping ClamAV $current_user"
+sudo systemctl stop clamav-daemon
+sudo systemctl stop clamav-freshclam
+
+sudo freshclam
+sudo chown "$current_user":clamav "/var/log/clamav/clamav.log"
+sudo chmod 770 "/var/log/clamav/clamav.log"
+sudo adduser "$current_user" clamav
+cat "/etc/clamav/clamd.conf" | sed "s/#\?User .*/User $USER/" > "clamd.conf"
+sudo mv -f "clamd.conf" "/etc/clamav/clamd.conf"
+sudo chown root:root "/etc/clamav/clamd.conf"
+
+echo "Starting ClamAV"
+sudo systemctl start clamav-daemon
+sudo systemctl start clamav-freshclam
+
+echo "Enabling ClamAV on startup"
+sudo systemctl enable clamav-daemon
+sudo systemctl enable clamav-freshclam

@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='GimmeThat',
-    version='0.2.0',
+    version='0.2.1',
     description='A file transfer tool',
     url='https://github.com/nejdetckenobi/gimme-that',
     author='nejdetckenobi',
@@ -18,6 +18,7 @@ setup(
     ],
     scripts=[
         'bin/gimme',
+        'bin/gimmeconf'
     ],
     include_package_data=True,
     classifiers=[

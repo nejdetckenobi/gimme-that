@@ -120,6 +120,21 @@ sudo systemctl enable clamav-daemon
 
 ### Clamav is not configured properly
 
+#### Easy way
+
+Linux users, after the installation, run `gimmeconf` and you should be OK.
+If you're not, then you should try the hard way.
+
+
+#### Hard way
+
+I am assuming that you reinstalled the following packages:
+(If you didn't, please try reinstalling the packages.)
+
+- clamav-daemon
+- clamav-freshclam
+- clamav-unofficial-sigs
+
 **Note:** `USERNAME` is your account's username. **Not** the name which you created with `gimme add`.
 
 Stop the ClamAV first:
