@@ -93,6 +93,8 @@ Command line while a client uploads some files, ClamAV's action when an infected
 
 ### Clamav is not installed
 
+**Note:** For CentOS, please follow [this tutorial](https://linux-audit.com/install-clamav-on-centos-7-using-freshclam/) then take the [hard way](#hard-way). The commands below will not work for you obviously till the hard way.
+
 Please use the command below to install ClamAV:
 
 ```sh
@@ -126,8 +128,7 @@ sudo systemctl enable clamav-freshclam
 #### Easy way
 
 Linux users uses Debian/Ubuntu based distros, after the installation, run `gimmeconf` and you should be OK.
-For CentOS, please follow [this tutorial](https://linux-audit.com/install-clamav-on-centos-7-using-freshclam/) then take the hard way. 
-For all else - or if you're not OK with that - then you should try the hard way.
+For all else - or if you're not OK with that - you should try the hard way.
 
 
 #### Hard way
