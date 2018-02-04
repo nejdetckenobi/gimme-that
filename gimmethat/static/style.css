@@ -44,9 +44,30 @@ form {
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 1.5s
+    transition: opacity 1.5s
 }
 
 .fade-enter, .fade-leave-to {
-  opacity: 0
+    opacity: 0
+}
+
+#message {
+    display: none;
+}
+
+.dropzone {
+    border-radius: 4px;
+    border: 3px dashed #ccc;
+    height: 300px;
+}
+
+.dropzone * {
+    display: none;
+}
+
+.dropzone #message {
+    display: block;
+    color: #ccc;
+    position: relative;
+    top: calc(50% - 36px);
 }
