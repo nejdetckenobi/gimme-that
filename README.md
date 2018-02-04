@@ -76,6 +76,8 @@ For example, to provide the screen above and to set upload directory to *SOMEPAT
 
 - *GimmeThat* **does not overwrite** uploaded files. When your friend `user` used your server to upload `wiggle.jpg` at `2018-01-17 16:14:24.620737`, program will put the files into `~/Uploads/user/2018-01-17 16-14-24.620737/wiggle.jpg`. So, even if he/she uploads the same file again and again, it'll be put into different directories.
 
+- You can drop files. It has drag and drop support.
+
 - If you specify `--scan` option and getting interesting logs for every single file (or an error maybe), you may have the issues below:
   Both issues are solved for linux. Please check [Antivirus Issues](#antivirus-issues) section.
   - Clamav is not installed.

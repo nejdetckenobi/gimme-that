@@ -13,7 +13,8 @@
 {% endblock %}
 {% block body %}
     <div id="app" class="col-md-offset-4 col-md-4">
-        <form class="col-md-12 text-center clearfix" action="/upload" method="post" enctype="multipart/form-data">
+        <form class="col-md-12 col-xs-12 text-center clearfix" :class="{'dropzone': is_drag_active}" action="/upload" method="post" enctype="multipart/form-data" @dragover.prevent="ondragover_handler" @drop.prevent="ondrop_handler" @dragend.prevent="ondragend_handler" @dragleave="ondragleave_handler">
+            <h3 id="message">Over here!</h3>
             <h3>{{ title }}</h3>
             <br>
             <input id="file-input" type="file" name="file" multiple @change="get_file_list">

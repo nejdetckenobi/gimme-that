@@ -3,7 +3,8 @@ app = new Vue({
     'data': {
         'file_list': [],
         'percentage': 0.0,
-        'abort': false
+        'abort': false,
+        'is_drag_active': false
     },
     'methods': {
         get_file_list() {
@@ -49,6 +50,21 @@ app = new Vue({
                 app.percentage = 0;
             }
             xhr.send(fd);
+        },
+        ondragover_handler(e) {
+            this.is_drag_active = true;
+            console.log('AHOY!');
+        },
+        ondrop_handler(e) {
+            this.is_drag_active = false;
+            this.file_list = [];
+            document.getElementById('file-input').files = e.dataTransfer.files;
+        },
+        ondragend_handler(e) {
+            this.is_drag_active = false;
+        },
+        ondragleave_handler(e) {
+            this.is_drag_active = false;
         }
     }
 });
