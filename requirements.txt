@@ -1,0 +1,5 @@
+flask
+flask_bootstrap
+clamd
+netifaces
+pytest

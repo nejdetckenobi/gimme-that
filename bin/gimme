@@ -2,41 +2,14 @@
 import argparse
 import json
 import netifaces as ni
-from gimmethat import app, USER_CREDS
-from gimmethat.config import DEBUG, UPLOAD_DIR
+from gimmethat import app
+from gimmethat.helpers import get_ips
+from gimmethat.users import save_creds, load_creds
+from gimmethat.config import DefaultConfiguration
 import os
 import re
 
 FILESIZE_PATTERN = re.compile('([0-9]+(\.[0-9]+)?)(.?)')
-
-
-def save_creds(creds=None):
-    if not creds:
-        creds = []
-    with open(USER_CREDS, 'w') as f:
-        json.dump(creds, f, indent=4)
-
-
-def load_creds():
-    try:
-        with open(USER_CREDS) as f:
-            creds = json.load(f)
-        return creds
-    except:
-        save_creds()
-    return []
-
-
-def get_ips():
-    interfaces = ni.interfaces()
-    ips = []
-    for interface in interfaces:
-        try:
-            if 'broadcast' in ni.ifaddresses(interface)[ni.AF_INET][0]:
-                ips.append(ni.ifaddresses(interface)[ni.AF_INET][0]['addr'])
-        except KeyError:
-            pass
-    return ips
 
 
 main_parser = argparse.ArgumentParser(description='Upload server tool')
@@ -44,13 +17,10 @@ subparsers = main_parser.add_subparsers(help='What to do?', dest='branch')
 
 run_parser = subparsers.add_parser('run', help='Runs server')
 run_parser.add_argument('--port', '-p', type=int,
-                        help='Server port', default=5000)
-run_parser.add_argument('--title', '-t', type=str,
-                        help='Upload page\'s title', default='')
-run_parser.add_argument('--directory', '-d', type=str,
-                        help='Upload directory',
-                        default=UPLOAD_DIR)
-run_parser.add_argument('--max-size', '-M', type=str, default='',
+                        help='Server port')
+run_parser.add_argument('--title', '-t', type=str, help='Upload page\'s title')
+run_parser.add_argument('--directory', '-d', type=str, help='Upload directory')
+run_parser.add_argument('--max-size', '-M', type=str,
                         help='Maximum upload size.')
 
 run_parser.add_argument('--scan', action='store_true',
@@ -78,15 +48,6 @@ if args.branch == 'run':
     log = logging.getLogger(name='werkzeug')
     log.setLevel(logging.INFO)
 
-    if not os.path.exists(os.path.expanduser(args.directory)):
-        print('Creating upload directory: {}'.format(
-            os.path.expanduser(args.directory)))
-        os.mkdir(os.path.expanduser(args.directory))
-
-    if not os.path.exists(USER_CREDS):
-        print('Creating credential list : {}'.format(USER_CREDS))
-        save_creds()
-
     if args.max_size:
         num, _, unit = FILESIZE_PATTERN.match(args.max_size).groups()
         num = float(num)
@@ -102,28 +63,17 @@ if args.branch == 'run':
             raise Exception('Unidentified unit \'{}\''.format(unit))
 
         app.config['MAX_CONTENT_LENGTH'] = int(num)
-    else:
-        app.config['MAX_CONTENT_LENGTH'] = None
 
-    app.config['SCAN'] = args.scan
+    if args.scan:
+        app.config['SCAN'] = args.scan
+    if args.title:
+        app.config['TITLE'] = args.title
+    if args.directory:
+        app.config['UPLOAD_DIR'] = os.path.expanduser(args.directory)
+    if args.port:
+        app.config['PORT'] = args.port
 
-    # Console messages
-    if app.config['TITLE']:
-        print('"{}" is running with following configuration:'.format(
-            app.config['TITLE']))
-    else:
-        print('Running with following configuration:')
-    print('Max upload size: {} ({})'.format(
-        args.max_size, app.config['MAX_CONTENT_LENGTH']))
-    print('Scan uploaded files:', app.config['SCAN'])
-
-    print('You can use the addresses below')
-    for ip in get_ips():
-        print('\thttp://{}:{}'.format(ip, args.port))
-
-    app.config['TITLE'] = args.title
-    app.config['UPLOAD_DIR'] = os.path.expanduser(args.directory)
-    app.run(host="0.0.0.0", port=args.port, debug=DEBUG, threaded=True)
+    app.start_service()
 
 elif args.branch == 'add':
     creds = load_creds()

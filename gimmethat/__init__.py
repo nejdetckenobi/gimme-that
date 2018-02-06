@@ -2,47 +2,46 @@ from flask import (Flask, request, url_for, Response,
                    abort, render_template, redirect)
 from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename
-from gimmethat.config import UPLOAD_DIR, SECRET_KEY, USER_CREDS
+from gimmethat.config import DefaultConfiguration
+from gimmethat.users import check_auth, init_users
+from gimmethat.helpers import get_ips
 from functools import wraps, partial
 from datetime import datetime
 import werkzeug
-import netifaces as ni
-import json
 import os
 from gimmethat.antivirus import scan_file
 # from ipdb import set_trace
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = SECRET_KEY
-app.config['BOOTSTRAP_SERVE_LOCAL'] = True
-app.config['UPLOAD_DIR'] = UPLOAD_DIR
-app.config['TITLE'] = ''
-app.config['SCAN'] = False
 
+class ApplicationObject(Flask):
+    """docstring for ApplicationObject"""
+    def __init__(self, *args, **kwargs):
+        super(ApplicationObject, self).__init__(*args, **kwargs)
+        self.args = args
+        self.kwargs = kwargs
+
+    def start_service(self):
+        # Console messages
+        init_users()
+        print('Running with following configuration:')
+        if isinstance(self.config['MAX_CONTENT_LENGTH'], int):
+            print('Max upload size: {} bytes'.format(
+                self.config['MAX_CONTENT_LENGTH']))
+        else:
+            print('Max upload size: None')
+        print('Scan uploaded files:', self.config['SCAN'])
+
+        print('You can use the addresses below')
+        for ip in get_ips():
+            print('\thttp://{}:{}'.format(ip, self.config['PORT']))
+
+        app.run(host="0.0.0.0", port=app.config['PORT'],
+                debug=app.config['DEBUG'], threaded=True)
+
+
+app = ApplicationObject(__name__)
+app.config.from_object(DefaultConfiguration)
 Bootstrap(app)
-
-
-def get_ips():
-    interfaces = ni.interfaces()
-    ips = []
-    for interface in interfaces:
-        try:
-            if 'broadcast' in ni.ifaddresses(interface)[ni.AF_INET][0]:
-                ips.append(ni.ifaddresses(interface)[ni.AF_INET][0]['addr'])
-        except KeyError:
-            pass
-    return ips
-
-
-def check_auth(username, password):
-    """This function is called to check if a username /
-    password combination is valid.
-    """
-    with open(USER_CREDS) as f:
-        users = json.load(f)
-    for u in users:
-        if u['username'] == username and u['password'] == password:
-            return True
 
 
 def requires_auth(f):
@@ -64,11 +63,11 @@ def file_stream_saver(total_content_length, content_type, filename,
         if total_content_length > app.config['MAX_CONTENT_LENGTH']:
             return abort(413)
     filename = secure_filename(filename)
-    file_upl_dir = os.path.join(UPLOAD_DIR,
+    file_upl_dir = os.path.join(app.config['UPLOAD_DIR'],
                                 request.authorization.username,
                                 timestamp)
     if not os.path.exists(file_upl_dir):
-        os.mkdir(file_upl_dir)
+        os.makedirs(file_upl_dir, exist_ok=True)
     filepath = os.path.join(file_upl_dir, filename)
     fp = open(filepath, 'wb')
     return fp
@@ -85,12 +84,13 @@ def info():
     return render_template('info.html')
 
 
-@app.route('/upload', methods=['POST'])
+@app.route('/', methods=['POST'])
 @requires_auth
 def upload(data):
     folder_name = data['username']
-    if folder_name not in os.listdir(UPLOAD_DIR):
-        os.mkdir(os.path.join(UPLOAD_DIR, folder_name))
+    if folder_name not in os.listdir(app.config['UPLOAD_DIR']):
+        os.makedirs(os.path.join(app.config['UPLOAD_DIR'], folder_name),
+                    exist_ok=True)
     print('RECEIVED from "{}"'.format(folder_name))
     timestamp = str(datetime.now()).replace(':', '-')
     stream, form, files = werkzeug.formparser.parse_form_data(
@@ -102,7 +102,7 @@ def upload(data):
         fp.close()
         if app.config['SCAN']:
             abs_filepath = os.path.join(
-                UPLOAD_DIR, folder_name, timestamp, name)
+                app.config['UPLOAD_DIR'], folder_name, timestamp, name)
             scan_results = scan_file(abs_filepath)
             r = scan_results[abs_filepath]
             if r[0] == 'OK':

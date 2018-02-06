@@ -19,7 +19,7 @@ app = new Vue({
                 fd.append(this.file_list[i].name, this.file_list[i]);
             }
             let xhr = new XMLHttpRequest();
-            xhr.open('POST', '/upload', true);
+            xhr.open('POST', '/', true);
             application = this;
             xhr.upload.onprogress = function (e) {
                 if (e.lengthComputable) {

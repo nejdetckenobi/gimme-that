@@ -1,4 +1,4 @@
-﻿# Gimme That
+﻿# Gimme That [![Build Status](https://travis-ci.org/nejdetckenobi/gimme-that.svg?branch=master)](http://travis-ci.org/nejdetckenobi/gimme-that)
 
 _Gimme That_ is a file transfer tool written in Python. It turns your computer into a server and your friends simply upload their files to your computer! It has a simple web interface. So anyone can use it.
 
@@ -89,6 +89,9 @@ Command line while a client uploads some files, ClamAV's action when an infected
 
 ![antivirus](https://user-images.githubusercontent.com/4905664/35181654-f3143e10-fdd6-11e7-8b67-9f7e834e87dc.gif)
 
+You can see the drag&drop support on Chrome
+
+![drag_and_drop](https://user-images.githubusercontent.com/4905664/35865971-fbf7c446-0b66-11e8-8102-05ce82f28970.gif)
 
 
 ## Antivirus Issues

@@ -15,7 +15,7 @@
     <div id="app" class="col-md-12 col-sm-12 col-xs-12"
         @dragenter.prevent.stop="ondragenter_handler" @drop.prevent="ondrop_handler" @dragover.prevent="ondragover_handler" @dragend.prevent="ondragend_handler">
         <div class="col-lg-12 text-center clearfix dropzone" v-show="is_drag_active" @dragleave.prevent="ondragleave_handler"></div>
-        <form class="col-md-offset-3 col-md-6 col-xs-12 text-center clearfix" v-show="!is_drag_active" action="/upload" method="post" enctype="multipart/form-data">
+        <form class="col-md-offset-3 col-md-6 col-xs-12 text-center clearfix" v-show="!is_drag_active" action="/" method="post" enctype="multipart/form-data">
             <h3>{{ title }}</h3>
             <br>
             <input id="file-input" type="file" name="file" multiple @change="get_file_list">

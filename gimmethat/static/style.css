@@ -66,6 +66,6 @@ form {
     content: 'Drop your files here!';
     width: 100%;
     text-align: center;
-    margin-top: calc(100% / 3 - 18px);
-    z-index: -1;
+    top: calc(50% - 54px);
+    position: relative;
 }
