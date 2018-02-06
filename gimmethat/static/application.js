@@ -52,8 +52,6 @@ app = new Vue({
             xhr.send(fd);
         },
         ondragover_handler(e) {
-            this.is_drag_active = true;
-            console.log('AHOY!');
         },
         ondrop_handler(e) {
             this.is_drag_active = false;
@@ -64,6 +62,12 @@ app = new Vue({
             this.is_drag_active = false;
         },
         ondragleave_handler(e) {
+            this.is_drag_active = false;
+        },
+        ondragenter_handler(e) {
+            this.is_drag_active = true;
+        },
+        ondragexit_handler(e) {
             this.is_drag_active = false;
         }
     }

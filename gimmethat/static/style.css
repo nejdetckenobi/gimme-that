@@ -5,12 +5,14 @@ html, body {
 }
 
 #app {
-    margin-top: 20%;
+    height: 100%;
+    width: 100%;
+    padding: 16px;
+    margin: 0;
 }
 
 form {
-    opacity: 1.0;
-    transition: opacity 1.0s;
+    margin-top: 20%;
 }
 
 #file-input {
@@ -48,26 +50,22 @@ form {
 }
 
 .fade-enter, .fade-leave-to {
-    opacity: 0
-}
-
-#message {
-    display: none;
+    opacity: 0;
 }
 
 .dropzone {
+    background: transparent;
+    height: 100%;
     border-radius: 4px;
     border: 3px dashed #ccc;
-    height: 300px;
-}
-
-.dropzone * {
-    display: none;
-}
-
-.dropzone #message {
-    display: block;
+    font-size: 36px;
     color: #ccc;
-    position: relative;
-    top: calc(50% - 36px);
+}
+
+.dropzone::before {
+    content: 'Drop your files here!';
+    width: 100%;
+    text-align: center;
+    margin-top: calc(100% / 3 - 18px);
+    z-index: -1;
 }
