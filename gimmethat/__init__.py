@@ -5,12 +5,15 @@ from werkzeug.utils import secure_filename
 from gimmethat.config import DefaultConfiguration
 from gimmethat.users import check_auth, init_users
 from gimmethat.helpers import get_ips
+from gimmethat.notifications import (show_start_notification,
+                                     show_login_notification,
+                                     show_received_notification,
+                                     show_scanned_and_received_notification)
 from functools import wraps, partial
 from datetime import datetime
 import werkzeug
 import os
 from gimmethat.antivirus import scan_file
-# from ipdb import set_trace
 
 
 class ApplicationObject(Flask):
@@ -30,11 +33,12 @@ class ApplicationObject(Flask):
         else:
             print('Max upload size: None')
         print('Scan uploaded files:', self.config['SCAN'])
-
+        print('Notifications:', 'ON' if app.config['NOTIFY'] else 'OFF')
         print('You can use the addresses below')
         for ip in get_ips():
             print('\thttp://{}:{}'.format(ip, self.config['PORT']))
-
+        if app.config['NOTIFY']:
+            show_start_notification()
         app.run(host="0.0.0.0", port=app.config['PORT'],
                 debug=app.config['DEBUG'], threaded=True)
 
@@ -76,6 +80,8 @@ def file_stream_saver(total_content_length, content_type, filename,
 @app.route('/')
 @requires_auth
 def index(data):
+    if app.config['NOTIFY']:
+        show_login_notification(request.authorization.username)
     return render_template('index.html', title=app.config['TITLE'])
 
 
@@ -98,6 +104,8 @@ def upload(data):
         stream_factory=partial(
             file_stream_saver,
             timestamp=timestamp))
+    files_ok = []
+    files_infected = []
     for name, fp in files.items():
         fp.close()
         if app.config['SCAN']:
@@ -106,8 +114,10 @@ def upload(data):
             scan_results = scan_file(abs_filepath)
             r = scan_results[abs_filepath]
             if r[0] == 'OK':
+                files_ok.append(fp.filename)
                 print('\t"{}" => {}'.format(fp.filename, r[0]))
             elif r[0] == 'FOUND':
+                files_infected.append(fp.filename)
                 print('\t"{}" => {} [{}] REMOVED!'.format(
                     fp.filename, r[0], r[1]))
                 os.remove(abs_filepath)
@@ -118,7 +128,18 @@ def upload(data):
                       'if you are encountering interesting logs for every',
                       'file.')
         else:
+            files_ok.append(fp.filename)
             print('\t"{}"'.format(fp.filename))
+
+    if app.config['NOTIFY']:
+        if app.config['SCAN']:
+            show_scanned_and_received_notification(
+                data['username'],
+                files_ok + files_infected,
+                files_infected
+            )
+        else:
+            show_received_notification(data['username'], files_ok)
 
     return redirect(url_for('success'))
 

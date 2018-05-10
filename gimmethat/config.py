@@ -1,5 +1,6 @@
 import os
 
+
 class DefaultConfiguration(object):
     # Debugging purposes
     DEBUG = False
@@ -26,3 +27,6 @@ class DefaultConfiguration(object):
 
     # Port
     PORT = 5000
+
+    # Notify
+    NOTIFY = False

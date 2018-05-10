@@ -1,11 +1,7 @@
 #!/bin/env python3
 import argparse
-import json
-import netifaces as ni
 from gimmethat import app
-from gimmethat.helpers import get_ips
 from gimmethat.users import save_creds, load_creds
-from gimmethat.config import DefaultConfiguration
 import os
 import re
 
@@ -26,7 +22,8 @@ run_parser.add_argument('--max-size', '-M', type=str,
 run_parser.add_argument('--scan', action='store_true',
                         help=('Scan uploaded files with clamav and '
                               'remove the infected ones'))
-
+run_parser.add_argument('--notify', action='store_true',
+                        help='Show notifications via notify-osd')
 add_user_parser = subparsers.add_parser('add', help='Add a user')
 add_user_parser.add_argument('username', type=str, help='User\'s name')
 add_user_parser.add_argument('password', type=str, help='User\'s password')
@@ -72,7 +69,7 @@ if args.branch == 'run':
         app.config['UPLOAD_DIR'] = os.path.expanduser(args.directory)
     if args.port:
         app.config['PORT'] = args.port
-
+    app.config['NOTIFY'] = args.notify
     app.start_service()
 
 elif args.branch == 'add':
