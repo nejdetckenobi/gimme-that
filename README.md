@@ -69,7 +69,7 @@ For example, to provide the screen above and to set upload directory to *SOMEPAT
 | `--title` | `""` (Nothing will be shown as title) |
 | `--max-size` | No limit if not set. <br> Can be `256` for 256 bytes, <br> `13.6K` for 13.6 kilobytes, <br> `1M` for 1 megabyte, <br> `2.2G` for 2.2 gigabytes, <br> etc. |
 | `--scan` | False if not specified. Else, <br> uploaded files will be scanned if you have ClamAV <br> and will be removed if infected. |
-
+| `--notify` | False if not specified. Else, <br> you'll have notifications via `libnotify-bin` package |
 ## Notes
 
 - *GimmeThat* uses [Twitter's Bootstrap](https://getbootstrap.com/).
