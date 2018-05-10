@@ -93,6 +93,9 @@ You can see the drag&drop support on Chrome
 
 ![drag_and_drop](https://user-images.githubusercontent.com/4905664/35865971-fbf7c446-0b66-11e8-8102-05ce82f28970.gif)
 
+You will be notified if you prefer by using `libnotify-bin`
+
+![notifications](https://user-images.githubusercontent.com/4905664/39870687-e4b2899a-546a-11e8-839c-471fab12c3f2.png)
 
 ## Antivirus Issues
 
