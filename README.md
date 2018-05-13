@@ -8,13 +8,21 @@ _Gimme That_ is a file transfer tool written in Python. It turns your computer i
 ## Installation
 
 Just use `pip install gimmethat` to install.
-It has following Python package dependencies
+It has following Python package dependencies, at its minimum
 
 - `flask`
 - `flask_bootstrap`
 - `netifaces`
-- `clamd`
-- `libnotify-bin` (if you want to use notifications)
+
+And if you want to use additional features like antivirus integration and notifications, you would need
+
+Python side
+- `clamd` (for antivirus integration)
+
+OS side
+- `python3-gi` (for notifications)
+- `libnotify-bin` (for notifications)
+- `clamav` (for antivirus integration)
 
 ## How to use it?
 
