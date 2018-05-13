@@ -14,6 +14,7 @@ It has following Python package dependencies
 - `flask_bootstrap`
 - `netifaces`
 - `clamd`
+- `libnotify-bin` (if you want to use notifications)
 
 ## How to use it?
 
@@ -65,7 +66,7 @@ For example, to provide the screen above and to set upload directory to *SOMEPAT
 | Name | Value |
 |------|-------|
 | `--directory` | `"~/Uploads"` (`~` is current user's home directory in both Windows and *nix) |
-| `--port` | 5000 |
+| `--port` | `5000` if not specified. |
 | `--title` | `""` (Nothing will be shown as title) |
 | `--max-size` | No limit if not set. <br> Can be `256` for 256 bytes, <br> `13.6K` for 13.6 kilobytes, <br> `1M` for 1 megabyte, <br> `2.2G` for 2.2 gigabytes, <br> etc. |
 | `--scan` | False if not specified. Else, <br> uploaded files will be scanned if you have ClamAV <br> and will be removed if infected. |
