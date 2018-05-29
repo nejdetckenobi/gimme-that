@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from flask import (Flask, request, url_for, Response,
                    abort, render_template, redirect)
 from flask_bootstrap import Bootstrap
@@ -24,6 +26,11 @@ class ApplicationObject(Flask):
         self.kwargs = kwargs
 
     def start_service(self):
+        self.warn_user()
+        app.run(host="0.0.0.0", port=app.config['PORT'],
+                debug=app.config['DEBUG'], threaded=True)
+
+    def warn_user(self):
         # Console messages
         init_users()
         print('Running with following configuration:')
@@ -39,8 +46,6 @@ class ApplicationObject(Flask):
             print('\thttp://{}:{}'.format(ip, self.config['PORT']))
         if app.config['NOTIFY']:
             show_start_notification()
-        app.run(host="0.0.0.0", port=app.config['PORT'],
-                debug=app.config['DEBUG'], threaded=True)
 
 
 app = ApplicationObject(__name__)
@@ -147,3 +152,4 @@ def upload(data):
 @app.route('/success', methods=['GET'])
 def success():
     return render_template('success.html')
+

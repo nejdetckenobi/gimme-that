@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='GimmeThat',
-    version='1.0.1',
+    version='2.0',
     description='A file transfer tool',
     url='https://github.com/nejdetckenobi/gimme-that',
     author='nejdetckenobi',
@@ -14,7 +14,8 @@ setup(
         'flask',
         'flask_bootstrap',
         'netifaces',
-        'clamd'
+        'clamd',
+        'gunicorn'
     ],
     scripts=[
         'bin/gimme',

@@ -1,8 +1,7 @@
 import unittest
 from unittest.mock import patch
-from gimmethat import app, check_auth
+from gimmethat import app
 from base64 import b64encode
-from io import StringIO
 from random import shuffle, sample, randint
 from string import ascii_letters, digits
 

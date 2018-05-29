@@ -14,6 +14,8 @@ It has following Python package dependencies
 - `flask_bootstrap`
 - `netifaces`
 - `clamd`
+- `gunicorn`
+
 
 ## How to use it?
 

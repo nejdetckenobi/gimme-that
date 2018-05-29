@@ -3,3 +3,4 @@ flask_bootstrap
 clamd
 netifaces
 pytest
+gunicorn
