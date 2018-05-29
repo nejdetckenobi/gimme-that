@@ -52,8 +52,10 @@ if __name__ == '__main__':
 
     change_user_parser = subparsers.add_parser(
         'change', help='Change a user\'s password')
-    change_user_parser.add_argument('username', type=str, help='User\'s name')
-    change_user_parser.add_argument('password', type=str, help='User\'s password')
+    change_user_parser.add_argument('username', type=str,
+                                    help='User\'s name')
+    change_user_parser.add_argument('password', type=str,
+                                    help='User\'s password')
 
     show_users_parser = subparsers.add_parser('show', help='Show all users')
 
@@ -80,18 +82,20 @@ if __name__ == '__main__':
             else:
                 raise Exception('Unidentified unit \'{}\''.format(unit))
 
-            standalone.cfg.set('limit-request-line', int(num))
-
+            standalone.cfg.set('limit_request_line', int(num))
+            standalone.application.config['MAX_CONTENT_LENGTH'] = int(num)
         if args.scan:
-            prototype_app.config['SCAN'] = args.scan
+            standalone.application.config['SCAN'] = args.scan
         if args.title:
-            prototype_app.config['TITLE'] = args.title
+            standalone.application.config['TITLE'] = args.title
         if args.directory:
-            prototype_app.config['UPLOAD_DIR'] = os.path.expanduser(
+            standalone.application.config['UPLOAD_DIR'] = os.path.expanduser(
                 args.directory)
         if args.port:
             standalone.cfg.set('bind', '0.0.0.0:' + str(args.port))
-        prototype_app.config['NOTIFY'] = args.notify
+            standalone.application.config['PORT'] = args.port
+
+        standalone.application.config['NOTIFY'] = args.notify
         standalone.cfg.set('loglevel', 'warning')
         standalone.run()
 
