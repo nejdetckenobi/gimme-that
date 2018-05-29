@@ -1,6 +1,6 @@
 ﻿# Gimme That [![Build Status](https://travis-ci.org/nejdetckenobi/gimme-that.svg?branch=master)](http://travis-ci.org/nejdetckenobi/gimme-that) [![PyPI version](https://badge.fury.io/py/GimmeThat.svg)](https://badge.fury.io/py/GimmeThat)
 
-_Gimme That_ is a file transfer tool written in Python. It turns your computer into a server and your friends simply upload their files to your computer! It has a simple web interface. So anyone can use it.
+_Gimme That_ is a file transfer tool written in Python. It turns your computer into a server and your friends simply upload their files to your computer! It has a simple web interface. So anyone can use it. It uses Python 3.4+, so...
 
 ![Peek](https://user-images.githubusercontent.com/4905664/34677327-d15db8ee-f4a0-11e7-898b-a6e01049dba6.gif)
 
@@ -8,14 +8,22 @@ _Gimme That_ is a file transfer tool written in Python. It turns your computer i
 ## Installation
 
 Just use `pip install gimmethat` to install.
-It has following Python package dependencies
+It has following Python package dependencies, at its minimum
 
 - `flask`
 - `flask_bootstrap`
 - `netifaces`
-- `clamd`
 - `gunicorn`
 
+And if you want to use additional features like antivirus integration and notifications, you would need
+
+Python side
+- `clamd` (for antivirus integration)
+
+OS side
+- `python3-gi` (for notifications)
+- `libnotify-bin` (for notifications)
+- `clamav` (for antivirus integration)
 
 ## How to use it?
 
@@ -67,7 +75,7 @@ For example, to provide the screen above and to set upload directory to *SOMEPAT
 | Name | Value |
 |------|-------|
 | `--directory` | `"~/Uploads"` (`~` is current user's home directory in both Windows and *nix) |
-| `--port` | 5000 |
+| `--port` | `5000` if not specified. |
 | `--title` | `""` (Nothing will be shown as title) |
 | `--max-size` | No limit if not set. <br> Can be `256` for 256 bytes, <br> `13.6K` for 13.6 kilobytes, <br> `1M` for 1 megabyte, <br> `2.2G` for 2.2 gigabytes, <br> etc. |
 | `--scan` | False if not specified. Else, <br> uploaded files will be scanned if you have ClamAV <br> and will be removed if infected. |
