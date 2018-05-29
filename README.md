@@ -21,8 +21,8 @@ Python side
 - `clamd` (for antivirus integration)
 
 OS side
-- `python3-gi` (for notifications)
-- `libnotify-bin` (for notifications)
+- `python3-gi` (for notifications) EXPERIMENTAL!
+- `libnotify-bin` (for notifications) EXPERIMENTAL!
 - `clamav` (for antivirus integration)
 
 ## How to use it?
