@@ -19,6 +19,7 @@ And if you want to use additional features like antivirus integration and notifi
 
 Python side
 - `clamd` (for antivirus integration)
+- `notify2` (for notifications)
 
 OS side
 - `python3-gi` (for notifications)
