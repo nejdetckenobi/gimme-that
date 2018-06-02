@@ -115,7 +115,8 @@ def upload(data):
         fp.close()
         if app.config['SCAN']:
             abs_filepath = os.path.join(
-                app.config['UPLOAD_DIR'], folder_name, timestamp, name)
+                app.config['UPLOAD_DIR'], folder_name,
+                timestamp, werkzeug.secure_filename(name))
             scan_results = scan_file(abs_filepath)
             r = scan_results[abs_filepath]
             if r[0] == 'OK':

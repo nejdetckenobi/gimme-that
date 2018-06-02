@@ -91,10 +91,10 @@ if __name__ == '__main__':
         if args.directory:
             standalone.application.config['UPLOAD_DIR'] = os.path.expanduser(
                 args.directory)
+        standalone.cfg.set('bind', '0.0.0.0:5000')
         if args.port:
             standalone.cfg.set('bind', '0.0.0.0:' + str(args.port))
             standalone.application.config['PORT'] = args.port
-
         standalone.application.config['NOTIFY'] = args.notify
         standalone.cfg.set('loglevel', 'warning')
         standalone.run()
