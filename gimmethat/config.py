@@ -14,6 +14,9 @@ class DefaultConfiguration(object):
     # You can rewrite the key. Don't forget the quotes
     SECRET_KEY = "#VERY_HARD_KEY#"
 
+    # This will turn authorization on/off
+    AUTHORIZATION = False
+
     # The line below keeps the user list.
     USER_CREDS = os.path.expanduser("~/gimmethat_userlist.json")
 

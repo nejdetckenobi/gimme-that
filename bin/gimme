@@ -99,7 +99,7 @@ if __name__ == '__main__':
             standalone.cfg.set('bind', '0.0.0.0:' + str(args.port))
             standalone.application.config['PORT'] = args.port
         standalone.application.config['NOTIFY'] = args.notify
-        standalone.application.config['AUTHORIZED'] = args.auth
+        standalone.application.config['AUTHORIZATION'] = args.auth
         standalone.cfg.set('loglevel', 'warning')
         standalone.run()
 

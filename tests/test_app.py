@@ -26,6 +26,7 @@ class LoginTests(unittest.TestCase):
         self.client = app.test_client()
 
     def test_page_open_no_creds(self):
+        app.config['AUTHORIZATION'] = True
         response = self.client.get('/')
         assert response.status_code == 401
 

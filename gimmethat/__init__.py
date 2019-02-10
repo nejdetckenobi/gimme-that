@@ -39,7 +39,7 @@ class ApplicationObject(Flask):
                 self.config['MAX_CONTENT_LENGTH']))
         else:
             print('Max upload size: None')
-        print('Usernames active:', self.config['AUTHORIZED'])
+        print('Usernames active:', self.config['AUTHORIZATION'])
         print('Scan uploaded files:', self.config['SCAN'])
         print('Notifications:', 'ON' if app.config['NOTIFY'] else 'OFF')
         print('You can use the addresses below')
@@ -57,7 +57,7 @@ Bootstrap(app)
 def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if app.config['AUTHORIZED']:
+        if app.config['AUTHORIZATION']:
             auth = request.authorization
             if not auth or not check_auth(auth.username, auth.password):
                 return Response(
