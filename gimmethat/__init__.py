@@ -77,8 +77,12 @@ def file_stream_saver(total_content_length, content_type, filename,
         if total_content_length > app.config['MAX_CONTENT_LENGTH']:
             return abort(413)
     filename = secure_filename(filename)
+    if app.config['AUTHORIZATION']:
+        folder_name = request.authorization.username
+    else:
+        folder_name = 'SHARED'
     file_upl_dir = os.path.join(app.config['UPLOAD_DIR'],
-                                request.authorization.username,
+                                folder_name,
                                 timestamp)
     if not os.path.exists(file_upl_dir):
         os.makedirs(file_upl_dir, exist_ok=True)
