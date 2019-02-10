@@ -28,7 +28,7 @@ OS side
 
 ## How to use it?
 
-_Gimme That_ has a simple concept: You turn yourself into a server, add some username and password, give that credentials to your friend with your adress and your friend uploads files to your computer.
+_Gimme That_ has a simple concept: You turn yourself into a server, add some username and password if you wish to have an authorization, give that credentials to your friend with your adress and your friend uploads files to your computer.
 
 So, there are several things you can do with this program.
 
