@@ -32,6 +32,11 @@ _Gimme That_ has a simple concept: You turn yourself into a server, add some use
 
 So, there are several things you can do with this program.
 
+
+## Authorized Transfers
+
+You can restrict _Gimme That_'s file uploading to a number of users with credentials. Just add the `--secure` optional argument to restrict file uploads to only authorized users with credentials. All information about user system is below. By default, _Gimme That_ does not use authorization.
+
 ### Creating users
 
 Use the line below to create a user named *USER* with the password *PASSWORD*
@@ -81,6 +86,8 @@ For example, to provide the screen above and to set upload directory to *SOMEPAT
 | `--max-size` | No limit if not set. <br> Can be `256` for 256 bytes, <br> `13.6K` for 13.6 kilobytes, <br> `1M` for 1 megabyte, <br> `2.2G` for 2.2 gigabytes, <br> etc. |
 | `--scan` | False if not specified. Else, <br> uploaded files will be scanned if you have ClamAV <br> and will be removed if infected. |
 | `--notify` | False if not specified. Else, <br> you'll have notifications via `libnotify-bin` package |
+| `--auth` | False if not specified. Else, <br> uploading a file requires HTTP basic auth |
+
 ## Notes
 
 - *GimmeThat* uses [Twitter's Bootstrap](https://getbootstrap.com/).

@@ -43,6 +43,9 @@ if __name__ == '__main__':
                                   'remove the infected ones'))
     run_parser.add_argument('--notify', action='store_true',
                             help='Show notifications via notify-osd')
+    run_parser.add_argument('--auth', action='store_true',
+                            help='Use username and password to authorization')
+
     add_user_parser = subparsers.add_parser('add', help='Add a user')
     add_user_parser.add_argument('username', type=str, help='User\'s name')
     add_user_parser.add_argument('password', type=str, help='User\'s password')
@@ -96,6 +99,7 @@ if __name__ == '__main__':
             standalone.cfg.set('bind', '0.0.0.0:' + str(args.port))
             standalone.application.config['PORT'] = args.port
         standalone.application.config['NOTIFY'] = args.notify
+        standalone.application.config['AUTHORIZED'] = args.auth
         standalone.cfg.set('loglevel', 'warning')
         standalone.run()
 

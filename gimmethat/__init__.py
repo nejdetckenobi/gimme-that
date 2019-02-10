@@ -39,6 +39,7 @@ class ApplicationObject(Flask):
                 self.config['MAX_CONTENT_LENGTH']))
         else:
             print('Max upload size: None')
+        print('Usernames active:', self.config['AUTHORIZED'])
         print('Scan uploaded files:', self.config['SCAN'])
         print('Notifications:', 'ON' if app.config['NOTIFY'] else 'OFF')
         print('You can use the addresses below')
@@ -56,13 +57,17 @@ Bootstrap(app)
 def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        auth = request.authorization
-        if not auth or not check_auth(auth.username, auth.password):
-            return Response(
-                render_template('unauthorized.html'), 401,
-                {'WWW-Authenticate': 'Basic realm="Login Required"'})
-        return f(data={'username': auth.username,
-                       'time': datetime.now()}, *args, **kwargs)
+        if app.config['AUTHORIZED']:
+            auth = request.authorization
+            if not auth or not check_auth(auth.username, auth.password):
+                return Response(
+                    render_template('unauthorized.html'), 401,
+                    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+            return f(data={'username': auth.username,
+                           'time': datetime.now()}, *args, **kwargs)
+        else:
+            return f(data={'username': 'SHARED',
+                           'time': datetime.now()}, *args, **kwargs)
     return decorated
 
 
@@ -102,7 +107,10 @@ def upload(data):
     if folder_name not in os.listdir(app.config['UPLOAD_DIR']):
         os.makedirs(os.path.join(app.config['UPLOAD_DIR'], folder_name),
                     exist_ok=True)
-    print('RECEIVED from "{}"'.format(folder_name))
+    if folder_name != 'SHARED':
+        print('RECEIVED from "{}":'.format(folder_name))
+    else:
+        print('RECEIVED from someone:')
     timestamp = str(datetime.now()).replace(':', '-')
     stream, form, files = werkzeug.formparser.parse_form_data(
         request.environ,
