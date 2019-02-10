@@ -19,12 +19,18 @@ def show_start_notification():
         n.show()
 
 
-def show_login_notification(username):
+def show_mainpage_opened_notification(username=None):
     if notification_applicable:
-        n = Notify.Notification(
-            'Someone logged in!',
-            '"{}" logged in to send you some files'.format(username)
-        )
+        if username:
+            n = Notify.Notification(
+                'Someone logged in!',
+                '"{}" logged in to send you some files'.format(username)
+            )
+        else:
+            n = Notify.Notification(
+                'Someone logged in!',
+                'Someone logged in to send you some files'
+            )
         n.set_timeout(DEFAULT_TIMEOUT_FOR_NOTIFICATIONS)
         n.show()
 

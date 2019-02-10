@@ -8,7 +8,7 @@ from gimmethat.config import DefaultConfiguration
 from gimmethat.users import check_auth, init_users
 from gimmethat.helpers import get_ips
 from gimmethat.notifications import (show_start_notification,
-                                     show_login_notification,
+                                     show_mainpage_opened_notification,
                                      show_received_notification,
                                      show_scanned_and_received_notification)
 from functools import wraps, partial
@@ -91,7 +91,10 @@ def file_stream_saver(total_content_length, content_type, filename,
 @requires_auth
 def index(data):
     if app.config['NOTIFY']:
-        show_login_notification(request.authorization.username)
+        if app.config['AUTHORIZATION']:
+            show_mainpage_opened_notification(request.authorization.username)
+        else:
+            show_mainpage_opened_notification()
     return render_template('index.html', title=app.config['TITLE'])
 
 
