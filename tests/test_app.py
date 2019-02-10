@@ -25,13 +25,19 @@ class LoginTests(unittest.TestCase):
         app.testing = True
         self.client = app.test_client()
 
-    def test_page_open_no_creds(self):
+    def test_mainpage_no_auth_success(self):
+        app.config['AUTHORIZATION'] = False
+        response = self.client.get('/')
+        assert response.status_code == 200
+
+    def test_mainpage_with_auth_no_creds(self):
         app.config['AUTHORIZATION'] = True
         response = self.client.get('/')
         assert response.status_code == 401
 
     @patch('gimmethat.users.load_creds', return_value=TEST_TRUE_CREDENTIALS)
-    def test_page_open_wrong_creds(self, load_creds):
+    def test_mainpage_with_auth_wrong_creds(self, load_creds):
+        app.config['AUTHORIZATION'] = True
         user = TEST_FALSE_CREDENTIALS[0]
         auth = b64encode(
             bytes(user['username'] + ':' + user['password'], 'utf8')).decode()
@@ -40,7 +46,8 @@ class LoginTests(unittest.TestCase):
         assert response.status_code == 401
 
     @patch('gimmethat.users.load_creds', return_value=TEST_TRUE_CREDENTIALS)
-    def test_page_open_correct_creds(self, load_creds):
+    def test_mainpage_with_auth_correct_creds(self, load_creds):
+        app.config['AUTHORIZATION'] = True
         user = TEST_TRUE_CREDENTIALS[0]
         auth = b64encode(
             bytes(user['username'] + ':' + user['password'], 'utf8')).decode()
@@ -50,7 +57,8 @@ class LoginTests(unittest.TestCase):
 
     @patch('os.listdir', return_value=[])
     @patch('gimmethat.users.load_creds', return_value=TEST_TRUE_CREDENTIALS)
-    def test_upload_file_wrong_creds(self, load_creds, listdir):
+    def test_file_upload_with_auth_wrong_creds(self, load_creds, listdir):
+        app.config['AUTHORIZATION'] = True
         user = TEST_FALSE_CREDENTIALS[0]
         auth = b64encode(
             bytes(user['username'] + ':' + user['password'], 'utf8')).decode()
@@ -64,7 +72,8 @@ class LoginTests(unittest.TestCase):
 
     @patch('os.listdir', return_value=[])
     @patch('gimmethat.users.load_creds', return_value=TEST_TRUE_CREDENTIALS)
-    def test_upload_file_correct_creds(self, load_creds, listdir):
+    def test_file_upload_with_auth_correct_creds(self, load_creds, listdir):
+        app.config['AUTHORIZATION'] = True
         user = TEST_TRUE_CREDENTIALS[0]
         auth = b64encode(
             bytes(user['username'] + ':' + user['password'], 'utf8')).decode()
