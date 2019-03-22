@@ -1,8 +1,9 @@
 #!/bin/env python3
 import argparse
 from gimmethat import app as prototype_app
-from gimmethat.users import save_creds, load_creds
+from gimmethat.users import add_cred, remove_cred, change_password, load_creds
 from gunicorn.app.base import BaseApplication
+from getpass import getpass
 import os
 import re
 FILESIZE_PATTERN = re.compile('([0-9]+(\.[0-9]+)?)(.?)')
@@ -48,7 +49,6 @@ if __name__ == '__main__':
 
     add_user_parser = subparsers.add_parser('add', help='Add a user')
     add_user_parser.add_argument('username', type=str, help='User\'s name')
-    add_user_parser.add_argument('password', type=str, help='User\'s password')
 
     remove_user_parser = subparsers.add_parser('remove', help='Remove a user')
     remove_user_parser.add_argument('username', type=str, help='User\'s name')
@@ -57,9 +57,6 @@ if __name__ == '__main__':
         'change', help='Change a user\'s password')
     change_user_parser.add_argument('username', type=str,
                                     help='User\'s name')
-    change_user_parser.add_argument('password', type=str,
-                                    help='User\'s password')
-
     show_users_parser = subparsers.add_parser('show', help='Show all users')
 
     args = main_parser.parse_args()
@@ -104,28 +101,50 @@ if __name__ == '__main__':
         standalone.run()
 
     elif args.branch == 'add':
-        creds = load_creds()
-        if args.username not in [u['username'] for u in creds]:
-            creds.append({'username': args.username,
-                          'password': args.password})
-            save_creds(creds)
+        try:
+            password = getpass()
+            if not password:
+                print('Password cannot be blank.')
+                result = False
+            else:
+                result = add_cred(args.username, password)
+
+        except KeyboardInterrupt:
+            print('User addition cancelled.')
+            result = False
+        if result:
+            print('User added.')
         else:
-            print('User already exists.')
+            print('User not added.')
 
     elif args.branch == 'remove':
-        creds = load_creds()
-        creds = [u for u in creds if u['username'] != args.username]
-        save_creds(creds)
+        result = remove_cred(args.username)
+        if result:
+            print('User removed.')
+        else:
+            print('User not found.')
 
     elif args.branch == 'show':
         creds = load_creds()
-        for u in creds:
-            print('Username: "{}", Password: "{}"'.format(
-                u['username'], u['password']))
+        if len(creds):
+            print('USERNAMES')
+            print('=========')
+            for u in creds:
+                print('-', u['username'])
+        else:
+            print('No users available. Use "gimme add" to add one.')
 
     elif args.branch == 'change':
-        creds = load_creds()
-        for u in creds:
-            if u['username'] == args.username:
-                u['password'] = args.password
-        save_creds(creds)
+        try:
+            password = getpass()
+            if not password:
+                print('Password cannot be blank.')
+                result = False
+            else:
+                result = change_password(args.username, password)
+        except KeyboardInterrupt:
+            result = False
+        if result:
+            print('Password is changed.')
+        else:
+            print('Password change failed.')
